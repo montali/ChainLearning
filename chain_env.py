@@ -62,17 +62,15 @@ class ChainEnv(Environment):
         reward: float
         """
         reward = 0
-        if action == 0:
+        if action == 0:  # A
+            self.state[0] += 0.1
+            if self.state[0] > 0.9:
+                reward = 1
+                self.state[0] = 0.9
+        elif action == 1:  # B
             if self.state[0] == 0:
                 reward = 0.2
             self.state[0] = 0
-        if action == 1:
-            self.state[0] += 0.1
-            if (
-                self.state[0] > 0.9
-            ):  # The 0.01 is needed for the last transition not to be a rewarding one
-                reward = 1
-                self.state[0] = 0.9
         return reward
 
     def summarizePerformance(self, test_data_set, *args, **kwargs):
