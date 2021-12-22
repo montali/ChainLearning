@@ -19,7 +19,7 @@ from deer.base_classes import Environment
 
 
 class ChainEnv(Environment):
-    def __init__(self):
+    def __init__(self, n_states=10):
         """Initialize environment."""
         # Defining the type of environment
         self.state = np.array(
@@ -27,6 +27,7 @@ class ChainEnv(Environment):
         )  # We start from state 0 and arrive at max state 1.0 (reward=1)
 
         self._counter = 1
+        self.n_states = n_states
 
     def reset(self, mode):
         """Resets the environment for a new episode.
@@ -64,9 +65,9 @@ class ChainEnv(Environment):
         reward = 0
         if action == 0:  # A
             self.state[0] += 0.1
-            if self.state[0] > 0.9:
+            if self.state[0] > ((self.n_states - 1) * 0.1):
                 reward = 1
-                self.state[0] = 0.9
+                self.state[0] = (self.n_states - 1) * 0.1
         elif action == 1:  # B
             if self.state[0] == 0:
                 reward = 0.2
@@ -100,9 +101,9 @@ class ChainEnv(Environment):
 
 def main():
     # Can be used for debug purposes
-    myenv = ChainEnv()
+    myenv = ChainEnv(10)
     for _ in range(20):
-        myenv.act(1)
+        myenv.act(0)
         print(myenv.observe())
     print(myenv.observe())
 
