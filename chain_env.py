@@ -24,7 +24,7 @@ class ChainEnv(Environment):
         # Defining the type of environment
         self.state = np.array(
             [0.0]
-        )  # We start from state 0 and arrive at max state 1.0 (reward=1)
+        )  # We start from state 0 and arrive at max state N-1 *0.1 (reward=1)
 
         self._counter = 1
         self.n_states = n_states
@@ -81,7 +81,7 @@ class ChainEnv(Environment):
         -----------
             test_data_set
         """
-
+        print(test_data_set)
         print("Summary was called but I don't wanna do it")
 
     def inputDimensions(self):
@@ -103,7 +103,7 @@ def main():
     # Can be used for debug purposes
     myenv = ChainEnv(10)
     for _ in range(20):
-        myenv.act(0)
+        print(myenv.act(0))
         print(myenv.observe())
     print(myenv.observe())
 

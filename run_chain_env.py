@@ -4,6 +4,7 @@
 
 import sys
 import logging
+from matplotlib.pyplot import draw_if_interactive
 import numpy as np
 
 from deer.default_parser import process_args
@@ -14,13 +15,21 @@ from deer.policies import EpsilonGreedyPolicy
 from chain_env import ChainEnv
 
 
+def dict_to_latex(dictionary):
+    result = [
+        f"{int((k*10))} & {round(float(v[0]),4)} & {round(float(v[1]),4)}\\\\"
+        for k, v in dictionary.items()
+    ]
+    return "\n".join(result)
+
+
 class Defaults:
     # ----------------------
     # Experiment Parameters
     # ----------------------
-    STEPS_PER_EPOCH = 1000
-    EPOCHS = 10
-    STEPS_PER_TEST = 500
+    STEPS_PER_EPOCH = 500
+    EPOCHS = 20
+    STEPS_PER_TEST = 50
     PERIOD_BTW_SUMMARY_PERFS = 1
 
     # ----------------------
@@ -32,7 +41,7 @@ class Defaults:
     # DQN Agent parameters:
     # ----------------------
     UPDATE_RULE = "rmsprop"
-    LEARNING_RATE = 0.005
+    LEARNING_RATE = 0.05
     LEARNING_RATE_DECAY = 1.0
     DISCOUNT = 0.9
     DISCOUNT_INC = 1.0
@@ -160,5 +169,8 @@ if __name__ == "__main__":
 
     # --- Run the experiment ---
     agent.run(parameters.epochs, parameters.steps_per_epoch)
-    computed_qvals = {i: qnetwork.qValues(np.array([i])) for i in np.arange(0, 1, 0.1)}
+    computed_qvals = {
+        i: qnetwork.qValues(np.array([i])) for i in np.arange(0, 0.5, 0.1)
+    }
     print(f"Found Q values {computed_qvals}")
+    print(dict_to_latex(computed_qvals))
